@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mood Day Planner</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 20px; }
+      button { margin: 6px 0; padding: 10px 12px; cursor: pointer; }
+      .box { margin-top: 14px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+      label { font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <h1>Mood Day Planner</h1>
+    <p>Choose how you feel, and get a gentle plan.</p>
+
+    <div>
+      <button onclick="plan('overwhelmed')">Overwhelmed</button>
+      <button onclick="plan('anxious')">Anxious</button>
+      <button onclick="plan('low')">Low energy</button>
+      <button onclick="plan('okay')">Okay</button>
+      <button onclick="plan('focused')">Focused</button>
+    </div>
+
+    <div class="box">
+      <div><label>Your plan:</label></div>
+      <div id="output" style="margin-top:8px;">Pick a mood above.</div>
+    </div>
+
+    <script>
+      function plan(mood) {
+        const plans = {
+          overwhelmed: [
+            "Pick 1 small task (10–20 min).",
+            "Do a 5-minute reset (water, breathe).",
+            "Schedule 2 rest breaks today."
+          ],
+          anxious: [
+            "Ground for 2–3 minutes (slow breathing).",
+            "Start with the easiest task first.",
+            "Put a short deadline: 'finish the next step'."
+          ],
+          low: [
+            "Choose one 'low-effort' win.",
+            "Do one thing only (no multitasking).",
+            "Plan rest before you plan productivity."
+          ],
+          okay: [
+            "Pick your top 3 tasks.",
+            "Do Task 1 first (before scrolling).",
+            "Add one quick break mid-day."
+          ],
+          focused: [
+            "Time-block 2 focused work sessions.",
+            "Do the hardest task first.",
+            "End with a short review (what’s next?)."
+          ]
+        };
+
+        const text = plans[mood].map(x => "• " + x).join("<br>");
+        document.getElementById("output").innerHTML = text;
+      }
+    </script>
+  </body>
+</html>
