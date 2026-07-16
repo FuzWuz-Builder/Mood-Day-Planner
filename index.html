@@ -5,62 +5,190 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mood Day Planner</title>
     <style>
-      body { font-family: Arial, sans-serif; padding: 20px; }
-      button { margin: 6px 0; padding: 10px 12px; cursor: pointer; }
+      body { font-family: Arial, sans-serif; padding: 20px; max-width: 900px; }
+      button { margin: 6px 6px 0 0; padding: 10px 12px; cursor: pointer; }
       .box { margin-top: 14px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
       label { font-weight: 600; }
+      input { padding: 10px; margin: 6px 0; width: 100%; max-width: 420px; }
+      .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+      .small { color: #555; font-size: 14px; }
+      ul { padding-left: 18px; }
+      .task { margin: 6px 0; padding: 8px; border: 1px solid #eee; border-radius: 6px; }
+      .task-title { font-weight: 700; }
+      .task-meta { color: #444; font-size: 14px; }
+      .danger { background: #ffe6e6; border: 1px solid #ffb3b3; }
     </style>
   </head>
   <body>
     <h1>Mood Day Planner</h1>
-    <p>Choose how you feel, and get a gentle plan.</p>
+    <p>Choose how you feel, get a gentle plan, and add your own tasks.</p>
 
-    <div>
-      <button onclick="plan('overwhelmed')">Overwhelmed</button>
-      <button onclick="plan('anxious')">Anxious</button>
-      <button onclick="plan('low')">Low energy</button>
-      <button onclick="plan('okay')">Okay</button>
-      <button onclick="plan('focused')">Focused</button>
+    <div class="box">
+      <div><label>Pick your mood:</label></div>
+      <div class="row" style="margin-top:8px;">
+        <button onclick="plan('overwhelmed')">Overwhelmed</button>
+        <button onclick="plan('anxious')">Anxious</button>
+        <button onclick="plan('low')">Low energy</button>
+        <button onclick="plan('okay')">Okay</button>
+        <button onclick="plan('focused')">Focused</button>
+      </div>
+
+      <div style="margin-top:12px;">
+        <div><label>Your mood plan:</label></div>
+        <div id="output" class="small" style="margin-top:8px;">Pick a mood above.</div>
+      </div>
     </div>
 
     <div class="box">
-      <div><label>Your plan:</label></div>
-      <div id="output" style="margin-top:8px;">Pick a mood above.</div>
+      <h2 style="margin-top:0;">Add my own tasks</h2>
+      <div class="row">
+        <div style="flex:1; min-width: 240px;">
+          <label for="taskTitle">Task title</label>
+          <input id="taskTitle" type="text" placeholder="e.g., Study chapter 1" maxlength="80" />
+        </div>
+        <div style="flex:1; min-width: 240px;">
+          <label for="taskTime">Time (optional)</label>
+          <input id="taskTime" type="text" placeholder="e.g., 14:00–15:00" maxlength="40" />
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:6px;">
+        <button onclick="addTask()">Add task</button>
+        <button class="danger" onclick="clearTasks()">Clear tasks</button>
+      </div>
+
+      <div class="small" style="margin-top:10px;">
+        Tasks are saved in your browser.
+      </div>
+
+      <div id="tasksBox" style="margin-top:12px;">
+        <div class="small">No tasks yet.</div>
+      </div>
     </div>
 
     <script>
-      function plan(mood) {
-        const plans = {
-          overwhelmed: [
-            "Pick 1 small task (10–20 min).",
-            "Do a 5-minute reset (water, breathe).",
-            "Schedule 2 rest breaks today."
-          ],
-          anxious: [
-            "Ground for 2–3 minutes (slow breathing).",
-            "Start with the easiest task first.",
-            "Put a short deadline: 'finish the next step'."
-          ],
-          low: [
-            "Choose one 'low-effort' win.",
-            "Do one thing only (no multitasking).",
-            "Plan rest before you plan productivity."
-          ],
-          okay: [
-            "Pick your top 3 tasks.",
-            "Do Task 1 first (before scrolling).",
-            "Add one quick break mid-day."
-          ],
-          focused: [
-            "Time-block 2 focused work sessions.",
-            "Do the hardest task first.",
-            "End with a short review (what’s next?)."
-          ]
-        };
+      const PLANS = {
+        overwhelmed: [
+          "Pick 1 small task (10–20 min).",
+          "Do a 5-minute reset (water, breathe).",
+          "Schedule 2 rest breaks today."
+        ],
+        anxious: [
+          "Ground for 2–3 minutes (slow breathing).",
+          "Start with the easiest task first.",
+          "Put a short deadline: 'finish the next step'."
+        ],
+        low: [
+          "Choose one 'low-effort' win.",
+          "Do one thing only (no multitasking).",
+          "Plan rest before you plan productivity."
+        ],
+        okay: [
+          "Pick your top 3 tasks.",
+          "Do Task 1 first (before scrolling).",
+          "Add one quick break mid-day."
+        ],
+        focused: [
+          "Time-block 2 focused work sessions.",
+          "Do the hardest task first.",
+          "End with a short review (what’s next?)."
+        ]
+      };
 
-        const text = plans[mood].map(x => "• " + x).join("<br>");
-        document.getElementById("output").innerHTML = text;
+      const STORAGE_KEY = "mdp_tasks_v1";
+
+      function uid() {
+        return Math.random().toString(16).slice(2) + Date.now().toString(16);
       }
+
+      function loadTasks() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveTasks(tasks) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+      }
+
+      function renderTasks() {
+        const tasks = loadTasks();
+        const box = document.getElementById("tasksBox");
+
+        if (!tasks.length) {
+          box.innerHTML = '<div class="small">No tasks yet.</div>';
+          return;
+        }
+
+        box.innerHTML = "";
+        tasks.forEach(task => {
+          const div = document.createElement("div");
+          div.className = "task";
+
+          const title = document.createElement("div");
+          title.className = "task-title";
+          title.textContent = task.title;
+
+          const meta = document.createElement("div");
+          meta.className = "task-meta";
+          meta.textContent = task.time ? `Time: ${task.time}` : "Time: (not set)";
+
+          const del = document.createElement("button");
+          del.textContent = "Remove";
+          del.className = "danger";
+          del.style.marginTop = "8px";
+          del.onclick = () => {
+            const remaining = loadTasks().filter(t => t.id !== task.id);
+            saveTasks(remaining);
+            renderTasks();
+          };
+
+          div.appendChild(title);
+          div.appendChild(meta);
+          div.appendChild(del);
+
+          box.appendChild(div);
+        });
+      }
+
+      function plan(mood) {
+        const output = document.getElementById("output");
+        const items = PLANS[mood] || ["Pick a mood above."];
+        output.innerHTML = items.map(x => "• " + x).join("<br>");
+      }
+
+      function addTask() {
+        const titleEl = document.getElementById("taskTitle");
+        const timeEl = document.getElementById("taskTime");
+
+        const title = (titleEl.value || "").trim();
+        const time = (timeEl.value || "").trim();
+
+        if (!title) {
+          alert("Please enter a task title.");
+          return;
+        }
+
+        const tasks = loadTasks();
+        tasks.push({ id: uid(), title, time: time || "" });
+        saveTasks(tasks);
+
+        titleEl.value = "";
+        timeEl.value = "";
+        renderTasks();
+      }
+
+      function clearTasks() {
+        if (!confirm("Clear all tasks?")) return;
+        saveTasks([]);
+        renderTasks();
+      }
+
+      // Initial render
+      renderTasks();
     </script>
   </body>
-</html>
+</html
