@@ -19,9 +19,17 @@
 
 <header class="hero">
 
-<div>
-<h1>Mood Day Planner 🌿</h1>
+<div class="top-controls">
 
+<button class="theme-btn" onclick="toggleTheme()">
+🌙 Dark Mode
+</button>
+
+</div>
+<div>
+<h1 id="greeting">
+Mood Day Planner 🌿
+</h1>
 <p class="intro">
 Your day does not have to be perfect to be meaningful.
 Mood Day Planner helps you understand how you feel, create realistic goals,
@@ -73,6 +81,48 @@ Your plan will adapt around how you feel.
 
 <div class="moods">
 
+<button class="mood-card happy"
+onclick="selectMood('happy')">
+😊
+<span>Happy</span>
+</button>
+
+
+<button class="mood-card okay"
+onclick="selectMood('okay')">
+🙂
+<span>Okay</span>
+</button>
+
+
+<button class="mood-card calm"
+onclick="selectMood('calm')">
+😌
+<span>Calm</span>
+</button>
+
+
+<button class="mood-card anxious"
+onclick="selectMood('anxious')">
+😟
+<span>Anxious</span>
+</button>
+
+
+<button class="mood-card low"
+onclick="selectMood('low')">
+😔
+<span>Low Energy</span>
+</button>
+
+
+<button class="mood-card overwhelmed"
+onclick="selectMood('overwhelmed')">
+😵
+<span>Overwhelmed</span>
+</button>
+
+</div>
 <button onclick="selectMood('happy')">
 😊 Happy
 </button>
