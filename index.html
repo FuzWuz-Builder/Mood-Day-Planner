@@ -1,17 +1,179 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Mood Day Planner</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css">
+<title>Mood Day Planner</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fraunces:wght@500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Everything on your website goes here -->
+<div class="container">
 
-    <script src="script.js"></script>
+<header class="hero">
+
+<div>
+<h1>Mood Day Planner 🌿</h1>
+
+<p class="intro">
+Your day does not have to be perfect to be meaningful.
+Mood Day Planner helps you understand how you feel, create realistic goals,
+and organise your day with kindness. Choose your mood, plan small steps,
+and build a routine that works with your energy.
+</p>
+
+<button class="today-btn" onclick="goToday()">
+Return to Today
+</button>
+
+</div>
+
+
+<div class="calendar-card">
+
+<h2 id="monthTitle"></h2>
+
+<div class="calendar-week">
+<span>Mon</span>
+<span>Tue</span>
+<span>Wed</span>
+<span>Thu</span>
+<span>Fri</span>
+<span>Sat</span>
+<span>Sun</span>
+</div>
+
+<div id="calendar"></div>
+
+</div>
+
+</header>
+
+
+
+<section class="grid">
+
+
+<div class="card">
+
+<h2>😊 How are you feeling?</h2>
+
+<p>
+Choose the mood that matches your energy today.
+Your plan will adapt around how you feel.
+</p>
+
+
+<div class="moods">
+
+<button onclick="selectMood('happy')">
+😊 Happy
+</button>
+
+<button onclick="selectMood('okay')">
+🙂 Okay
+</button>
+
+<button onclick="selectMood('calm')">
+😌 Calm
+</button>
+
+<button onclick="selectMood('anxious')">
+😟 Anxious
+</button>
+
+<button onclick="selectMood('low')">
+😔 Low Energy
+</button>
+
+<button onclick="selectMood('overwhelmed')">
+😵 Overwhelmed
+</button>
+
+</div>
+
+
+<div class="suggestion">
+
+<h3>Your gentle plan</h3>
+
+<p id="moodText">
+Choose a mood to receive suggestions.
+</p>
+
+</div>
+
+</div>
+
+
+
+
+<div class="card">
+
+<h2>📖 How to use</h2>
+
+
+<div class="steps">
+
+<div>
+<strong>1. Choose a date</strong>
+<p>
+Use the calendar to select the day you want to plan.
+</p>
+</div>
+
+
+<div>
+<strong>2. Pick your mood</strong>
+<p>
+Your mood helps create a realistic approach.
+</p>
+</div>
+
+
+<div>
+<strong>3. Add small goals</strong>
+<p>
+Break your day into simple tasks.
+</p>
+</div>
+
+
+<div>
+<strong>4. Celebrate progress</strong>
+<p>
+Small steps still count.
+</p>
+</div>
+
+</div>
+
+</div>
+
+
+</section>
+
+
+<section class="quote card">
+
+<h2>🌱 Daily reminder</h2>
+
+<p id="quote"></p>
+
+</section>
+
+
+</div>
+
+
+<script src="script.js"></script>
+
 </body>
-
 </html>
