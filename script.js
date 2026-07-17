@@ -336,3 +336,67 @@ now.getMonth()
 
 
 renderTasks();
+
+// DARK MODE
+
+
+function toggleTheme(){
+
+document.body.classList.toggle("dark");
+
+
+localStorage.setItem(
+"theme",
+document.body.classList.contains("dark")
+);
+
+}
+
+
+
+if(localStorage.getItem("theme")=="true"){
+
+document.body.classList.add("dark");
+
+}
+
+
+
+// GREETING
+
+
+function updateGreeting(){
+
+let hour =
+new Date().getHours();
+
+
+let text;
+
+
+if(hour < 12){
+
+text="Good Morning ☀️ Mood Day Planner";
+
+}
+
+else if(hour < 18){
+
+text="Good Afternoon 🌿 Mood Day Planner";
+
+}
+
+else{
+
+text="Good Evening 🌙 Mood Day Planner";
+
+}
+
+
+document.getElementById("greeting").innerText=text;
+
+}
+
+
+
+updateGreeting();
