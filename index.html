@@ -215,8 +215,12 @@ type="time"
 />
 
 
-<button onclick="addTask()">
-Add Task
+<button onclick="exportPlanner()">
+📤 Export
+</button>
+
+<button onclick="enableReminder()">
+🔔 Reminder
 </button>
 
 
@@ -241,8 +245,22 @@ Add Task
 
 
 
-<div id="taskList"></div>
+<div class="stats">
 
+<div class="stat-box">
+<h3>🔥 Streak</h3>
+<p id="streak">0 days</p>
+</div>
+
+
+<div class="stat-box">
+<h3>🌱 Mood History</h3>
+<p id="moodHistory">
+No moods saved yet.
+</p>
+</div>
+
+</div>
 
 </section>
 
