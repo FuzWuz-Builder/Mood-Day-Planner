@@ -161,6 +161,84 @@ Small steps still count.
 </section>
 
 
+<section class="planner card">
+
+<h2>📝 My Daily Tasks</h2>
+
+<div class="task-form">
+
+<input 
+id="taskInput"
+placeholder="Add a task..."
+/>
+
+
+<select id="taskCategory">
+
+<option value="Focus">Focus</option>
+<option value="Care">Self Care</option>
+<option value="Admin">Admin</option>
+<option value="Break">Break</option>
+
+</select>
+
+
+<input 
+id="taskTime"
+type="time"
+/>
+
+
+<button onclick="addTask()">
+Add Task
+</button>
+
+
+</div>
+
+
+<div class="progress">
+
+<h3>Today's Progress</h3>
+
+<div class="progress-bar">
+
+<div id="progressFill"></div>
+
+</div>
+
+<p id="progressText">
+0% complete
+</p>
+
+</div>
+
+
+
+<div id="taskList"></div>
+
+
+</section>
+
+
+
+<section class="timeline card">
+
+<h2>⏰ Day Timeline</h2>
+
+<div id="timeline">
+
+<p>
+Add tasks with times to see your schedule.
+</p>
+
+</div>
+
+</section>
+
+
+
+
 <section class="quote card">
 
 <h2>🌱 Daily reminder</h2>
