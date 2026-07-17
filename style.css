@@ -679,3 +679,103 @@ height:80px;
 
 
 }
+
+/* ===== FINAL POLISH ===== */
+
+
+.stats{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:15px;
+
+margin-top:25px;
+
+}
+
+
+.stat-box{
+
+background:#edf4ed;
+
+padding:18px;
+
+border-radius:20px;
+
+text-align:center;
+
+}
+
+
+.dark .stat-box{
+
+background:rgba(255,255,255,.12);
+
+}
+
+
+
+#calendar .has-task{
+
+position:relative;
+
+}
+
+
+
+#calendar .has-task::after{
+
+content:"";
+
+width:7px;
+
+height:7px;
+
+background:#315c4a;
+
+border-radius:50%;
+
+position:absolute;
+
+bottom:5px;
+
+left:50%;
+
+}
+
+
+
+.dark #calendar .has-task::after{
+
+background:white;
+
+}
+
+
+
+.task-form button{
+
+transition:.3s;
+
+}
+
+
+
+.task-form button:hover{
+
+transform:translateY(-3px);
+
+}
+
+
+@media(max-width:600px){
+
+.stats{
+
+grid-template-columns:1fr;
+
+}
+
+}
