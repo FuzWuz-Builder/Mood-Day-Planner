@@ -31,6 +31,208 @@ moods[mood];
 
 
 
+
+
+// TASK SYSTEM
+
+
+let tasks =
+JSON.parse(localStorage.getItem("tasks"))
+|| [];
+
+
+
+function saveTasks(){
+
+localStorage.setItem(
+"tasks",
+JSON.stringify(tasks)
+);
+
+}
+
+
+
+function addTask(){
+
+let text =
+document.getElementById("taskInput").value;
+
+
+let category =
+document.getElementById("taskCategory").value;
+
+
+let time =
+document.getElementById("taskTime").value;
+
+
+
+if(!text) return;
+
+
+
+tasks.push({
+
+text,
+category,
+time,
+done:false
+
+});
+
+
+saveTasks();
+
+renderTasks();
+
+
+document.getElementById("taskInput").value="";
+
+}
+
+
+
+function toggleTask(index){
+
+tasks[index].done =
+!tasks[index].done;
+
+
+saveTasks();
+
+renderTasks();
+
+}
+
+
+
+function deleteTask(index){
+
+tasks.splice(index,1);
+
+saveTasks();
+
+renderTasks();
+
+}
+
+
+
+function renderTasks(){
+
+let list =
+document.getElementById("taskList");
+
+
+let timeline =
+document.getElementById("timeline");
+
+
+list.innerHTML="";
+
+timeline.innerHTML="";
+
+
+let completed=0;
+
+
+
+tasks.forEach((task,index)=>{
+
+
+if(task.done)
+completed++;
+
+
+
+list.innerHTML += `
+
+<div class="task ${task.done?"completed":""}">
+
+<div>
+
+<strong>${task.text}</strong>
+
+<br>
+
+<small>
+${task.category}
+${task.time ? " • "+task.time:""}
+</small>
+
+</div>
+
+
+<div>
+
+<button onclick="toggleTask(${index})">
+✓
+</button>
+
+
+<button onclick="deleteTask(${index})">
+✕
+</button>
+
+</div>
+
+
+</div>
+
+`;
+
+
+
+if(task.time){
+
+timeline.innerHTML += `
+
+<div class="timeline-item">
+
+<strong>
+${task.time}
+</strong>
+
+<br>
+
+${task.text}
+
+</div>
+
+`;
+
+}
+
+
+});
+
+
+
+let percent =
+tasks.length ?
+Math.round(
+(completed/tasks.length)*100
+)
+:0;
+
+
+
+document.getElementById("progressFill")
+.style.width =
+percent+"%";
+
+
+
+document.getElementById("progressText")
+.innerText =
+`${percent}% complete`;
+
+}
+
+
+
+
 function goToday(){
 
 let today=new Date();
@@ -41,6 +243,7 @@ today.getMonth()
 );
 
 }
+
 
 
 
@@ -70,10 +273,11 @@ let firstDay=
 new Date(year,month,1).getDay();
 
 
-firstDay = firstDay===0 ? 6 : firstDay-1;
+firstDay =
+firstDay===0 ? 6:firstDay-1;
 
 
-let days=
+let days =
 new Date(year,month+1,0).getDate();
 
 
@@ -85,6 +289,7 @@ calendar.innerHTML+="<div></div>";
 }
 
 
+
 for(let d=1;d<=days;d++){
 
 let div=document.createElement("div");
@@ -92,20 +297,6 @@ let div=document.createElement("div");
 div.className="day";
 
 div.innerText=d;
-
-
-let today=new Date();
-
-
-if(
-d===today.getDate() &&
-month===today.getMonth() &&
-year===today.getFullYear()
-){
-
-div.classList.add("today");
-
-}
 
 
 calendar.appendChild(div);
@@ -141,3 +332,7 @@ createCalendar(
 now.getFullYear(),
 now.getMonth()
 );
+
+
+
+renderTasks();
