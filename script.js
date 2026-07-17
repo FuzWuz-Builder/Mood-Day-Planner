@@ -400,3 +400,204 @@ document.getElementById("greeting").innerText=text;
 
 
 updateGreeting();
+
+// ===============================
+// PART 4 FINAL FEATURES
+// ===============================
+
+
+
+// SAVE MOODS
+
+
+let moodHistory =
+JSON.parse(localStorage.getItem("moodHistory"))
+|| [];
+
+
+
+const oldSelectMood = selectMood;
+
+
+selectMood = function(mood){
+
+oldSelectMood(mood);
+
+
+moodHistory.push({
+
+mood:mood,
+
+date:new Date().toLocaleDateString()
+
+});
+
+
+localStorage.setItem(
+"moodHistory",
+JSON.stringify(moodHistory)
+);
+
+
+updateMoodHistory();
+
+};
+
+
+
+
+
+function updateMoodHistory(){
+
+let box =
+document.getElementById("moodHistory");
+
+
+if(!moodHistory.length){
+
+box.innerText="No moods saved yet.";
+
+return;
+
+}
+
+
+let recent =
+moodHistory.slice(-3);
+
+
+box.innerText =
+recent.map(
+m=>m.mood
+).join(" • ");
+
+}
+
+
+
+
+
+// STREAK
+
+
+function updateStreak(){
+
+let days =
+new Set(
+tasks.map(
+t=>t.time
+)
+);
+
+
+document.getElementById("streak")
+.innerText =
+days.size+" days";
+
+}
+
+
+
+
+
+// EXPORT
+
+
+function exportPlanner(){
+
+let text =
+"Mood Day Planner\n\n";
+
+
+tasks.forEach(t=>{
+
+text +=
+`${t.done?"✓":"☐"} ${t.text}`;
+
+if(t.time){
+
+text +=
+" - "+t.time;
+
+}
+
+text+="\n";
+
+});
+
+
+
+let blob =
+new Blob(
+[text],
+{type:"text/plain"}
+);
+
+
+let link =
+document.createElement("a");
+
+
+link.href =
+URL.createObjectURL(blob);
+
+
+link.download =
+"my-day-plan.txt";
+
+
+link.click();
+
+}
+
+
+
+
+
+// REMINDERS
+
+
+function enableReminder(){
+
+if(!("Notification" in window)){
+
+alert(
+"Notifications are not supported."
+);
+
+return;
+
+}
+
+
+Notification.requestPermission()
+.then(permission=>{
+
+
+if(permission==="granted"){
+
+new Notification(
+"Mood Day Planner 🌿",
+{
+body:
+"Your day is waiting. Start with one small step."
+}
+);
+
+}
+
+});
+
+
+}
+
+
+
+
+
+// UPDATE WHEN PAGE LOADS
+
+
+updateMoodHistory();
+
+updateStreak();
